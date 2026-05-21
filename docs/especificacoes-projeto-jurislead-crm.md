@@ -1,3 +1,5 @@
+# Especificações do JurisLead CRM
+
 ## IFTO / UAB - Campus Araguatins
 
 ## Curso de Pós-Graduação Lato Sensu em Desenvolvimento de Sistemas Computacionais
@@ -5,8 +7,6 @@
 ## Disciplina: Desenvolvimento Web
 
 ## Alunos: Antonio André Barcelos Chagas e Fabíola Gomes da Rocha
-
-## Especificações do JurisLead CRM
 
 Este documento consolida as especificações funcionais, técnicas e arquiteturais do JurisLead CRM, um sistema voltado para escritórios de advocacia que desejam captar leads, organizar atendimentos e automatizar o relacionamento com clientes.
 

@@ -1,3 +1,5 @@
+# Descrição do JurisLead CRM
+
 ## IFTO / UAB - Campus Araguatins
 
 ## Curso de Pós-Graduação Lato Sensu em Desenvolvimento de Sistemas Computacionais
@@ -5,8 +7,6 @@
 ## Disciplina: Desenvolvimento Web
 
 ## Alunos: Antonio André Barcelos Chagas e Fabíola Gomes da Rocha
-
-## Descrição do JurisLead CRM
 
 O **JurisLead CRM** é uma plataforma web desenvolvida para escritórios de advocacia que precisam atender leads com mais agilidade, organizar o relacionamento com clientes e automatizar etapas operacionais do atendimento jurídico. A proposta combina captação de contatos, triagem inicial com inteligência artificial, gestão de agenda, acompanhamento de processos e automação de follow-up por WhatsApp em um único sistema.
 
