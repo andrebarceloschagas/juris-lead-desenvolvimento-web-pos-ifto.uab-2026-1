@@ -201,3 +201,37 @@ O arquivo `requirements.txt` deve incluir, no mínimo, as dependências de execu
 ## 13. Conclusão
 
 O plano de testes do JurisLead CRM prioriza o que é mais crítico para a operação do sistema: entrada de leads, triagem com IA, agenda, processos, automações e administração segura. A abordagem TDD First, combinada com testes automatizados e uso criterioso de mocks, reduz regressões e cria uma base confiável para evolução contínua do produto.
+
+## 14. Implementação atual da suíte e status
+
+Esta seção descreve o estado atual da suíte de testes implementada no repositório.
+
+- Testes implementados e automatizados:
+  - `TST-LEAD-01`, `TST-LEAD-02` — criação de lead e validação de campos (`tests/test_lead.py`).
+  - `TST-IA-01`, `TST-IA-02` — triagem via IA com sucesso e falha (`tests/test_ia_triage.py`).
+  - `TST-AGE-01`, `TST-AGE-02` — criação e cancelamento de consultas (`tests/test_agenda.py`).
+  - `TST-PROC-01`, `TST-PROC-02` — criação de processo e adição de movimentação (`tests/test_processos.py`).
+  - `TST-WA-01`, `TST-WA-02` — disparo de lembrete por WhatsApp e tratamento de erro (`tests/test_whatsapp.py`).
+
+- Como executar a suíte completa (a partir da raiz do projeto):
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+.venv/bin/python -m pytest -q
+```
+
+- Executar apenas um arquivo de testes (exemplo):
+
+```bash
+.venv/bin/python -m pytest tests/test_agenda.py -q
+```
+
+- Executar com relatório de cobertura:
+
+```bash
+.venv/bin/python -m pytest --cov=app --cov-report=term-missing
+```
+
+Observação: os testes foram projetados para rodar de forma determinística (SQLite em memória, `responses` para HTTP mocks e `freezegun` para controle de tempo). Se quiser que eu atualize os testes para cobrir casos adicionais ou adicionar integração contínua (GitHub Actions), posso incluir um workflow básico.

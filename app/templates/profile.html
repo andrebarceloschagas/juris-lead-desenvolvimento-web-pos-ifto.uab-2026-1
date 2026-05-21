@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Meu Perfil</h2>
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">{{ user.name }}</h5>
+        <p class="card-text"><strong>Email:</strong> {{ user.email }}</p>
+        <p class="card-text"><strong>Biografia:</strong> {{ user.bio or 'Não informada' }}</p>
+        <p class="card-text">
+            <strong>Perfil:</strong>
+            {% if user.role == 'admin' %}
+            <span class="badge text-bg-dark ms-1">Admin</span>
+            {% else %}
+            <span class="badge text-bg-secondary ms-1">Usuário comum</span>
+            {% endif %}
+            <span class="text-muted ms-2">({{ user.role }})</span>
+        </p>
+        <a href="/perfil/editar" class="btn btn-primary">Editar perfil</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,127 @@
+{
+  "info": {
+    "name": "JurisLead CRM - API",
+    "_postman_id": "jurislead-crm-collection",
+    "description": "Collection com endpoints implementados do JurisLead CRM",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Create Lead",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"João Silva\",\"email\":\"joao@example.com\",\"phone\":\"+5511999999999\",\"origin\":\"landing\"}"
+        },
+        "url": {
+          "raw": "{{base_url}}/leads",
+          "host": ["{{base_url}}"],
+          "path": ["leads"]
+        }
+      }
+    },
+    {
+      "name": "Triage Lead (IA)",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{base_url}}/leads/:id/triage",
+          "host": ["{{base_url}}"],
+          "path": ["leads", ":id", "triage"]
+        }
+      }
+    },
+    {
+      "name": "Create Consulta",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"lead_id\":1,\"scheduled_at\":\"2026-06-10T15:00:00\"}"
+        },
+        "url": {
+          "raw": "{{base_url}}/consultas",
+          "host": ["{{base_url}}"],
+          "path": ["consultas"]
+        }
+      }
+    },
+    {
+      "name": "Cancel Consulta",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{base_url}}/consultas/:id/cancel",
+          "host": ["{{base_url}}"],
+          "path": ["consultas", ":id", "cancel"]
+        }
+      }
+    },
+    {
+      "name": "Notify Consulta (WhatsApp)",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{base_url}}/consultas/:id/notify",
+          "host": ["{{base_url}}"],
+          "path": ["consultas", ":id", "notify"]
+        }
+      }
+    },
+    {
+      "name": "Create Processo",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"lead_id\":1,\"title\":\"Ação de Cobrança\",\"description\":\"Resumo do processo\"}"
+        },
+        "url": {
+          "raw": "{{base_url}}/processos",
+          "host": ["{{base_url}}"],
+          "path": ["processos"]
+        }
+      }
+    },
+    {
+      "name": "Add Movimentacao",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"description\":\"Distribuído ao fórum\"}"
+        },
+        "url": {
+          "raw": "{{base_url}}/processos/:id/movimentacoes",
+          "host": ["{{base_url}}"],
+          "path": ["processos", ":id", "movimentacoes"]
+        }
+      }
+    },
+    {
+      "name": "Get Processo",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{base_url}}/processos/:id",
+          "host": ["{{base_url}}"],
+          "path": ["processos", ":id"]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Novo Lead</h2>
+<form method="post" action="/leads" class="ajax">
+    <div class="mb-3">
+        <label class="form-label">Nome</label>
+        <input name="name" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input name="email" class="form-control" type="email">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Telefone</label>
+        <input name="phone" class="form-control">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Origem</label>
+        <input name="origin" class="form-control">
+    </div>
+    <button class="btn btn-primary" type="submit">Cadastrar</button>
+</form>
+{% endblock %}

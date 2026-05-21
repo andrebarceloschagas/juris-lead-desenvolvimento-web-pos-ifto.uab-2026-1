@@ -8,7 +8,7 @@
 
 ## Alunos: Antonio André Barcelos Chagas e Fabíola Gomes da Rocha
 
-O **JurisLead CRM** é uma plataforma web desenvolvida para escritórios de advocacia que precisam atender leads com mais agilidade, organizar o relacionamento com clientes e automatizar etapas operacionais do atendimento jurídico. A proposta combina captação de contatos, triagem inicial com inteligência artificial, gestão de agenda, acompanhamento de processos e automação de follow-up por WhatsApp em um único sistema.
+O **JurisLead CRM** é uma plataforma web desenvolvida para escritórios de advocacia que precisam atender leads com mais agilidade, organizar o relacionamento com clientes e automatizar etapas operacionais do atendimento jurídico. A proposta combina captação de contatos, triagem inicial com inteligência artificial, gestão de agenda, acompanhamento de processos, automação de follow-up por WhatsApp, landing page pública de captação e painel de métricas em um único sistema.
 
 ## Visão geral
 
@@ -28,7 +28,7 @@ O JurisLead CRM enfrenta essas dores com automação, organização e monitorame
 
 ## Solução proposta
 
-O sistema atua como um CRM especializado para advocacia, reunindo ferramentas para captar leads, qualificar contatos, registrar informações relevantes do caso e manter o relacionamento com o cliente de forma previsível.
+O sistema atua como um CRM especializado para advocacia, reunindo ferramentas para captar leads, qualificar contatos, registrar informações relevantes do caso e manter o relacionamento com o cliente de forma previsível. Na versão atual do projeto, a landing page pública de captação e o painel de métricas gerencial já estão implementados.
 
 Entre os principais recursos previstos estão:
 
@@ -53,7 +53,7 @@ O JurisLead CRM é direcionado a:
 
 ### 1. Landing page de captação
 
-A plataforma pode receber contatos de uma página inicial voltada à conversão, permitindo que o lead entre no fluxo de atendimento já com os dados básicos registrados.
+A plataforma recebe contatos por uma página inicial voltada à conversão, permitindo que o lead entre no fluxo de atendimento já com os dados básicos registrados. Esse fluxo já está disponível na implementação atual.
 
 ### 2. Chat com inteligência artificial
 
@@ -77,7 +77,7 @@ Mensagens automatizadas podem ser enviadas para lembrar consultas, reforçar con
 
 ### 7. Painel de métricas
 
-O painel gerencial apresenta indicadores importantes para acompanhamento comercial e operacional do escritório.
+O painel gerencial apresenta indicadores importantes para acompanhamento comercial e operacional do escritório. Esse painel já está disponível na versão atual, com métricas resumidas de leads, consultas, processos e usuários.
 
 ## Arquitetura e tecnologia
 

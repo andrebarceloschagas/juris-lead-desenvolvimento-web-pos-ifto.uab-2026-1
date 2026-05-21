@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row mb-4">
+    <div class="col-lg-8">
+        <div class="hero-panel p-4 rounded-4">
+            <h1 class="h2 mb-2">{{ role_label }}</h1>
+            <p class="mb-0">Aqui você acompanha a rotina diária do escritório com foco em {{ role_focus }}.</p>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+                <h2 class="h5">Atalhos rápidos</h2>
+                {% for action in primary_actions %}
+                <a href="{{ action.href }}" class="btn btn-{{ action.variant }} d-block mb-2">{{ action.label }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    {% for card in summary_cards %}
+    <div class="col-md-3">
+        <div class="metric-card"><span>{{ card.label }}</span><strong>{{ card.value }}</strong></div>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body">
+        <h2 class="h5">{{ priority_title }}</h2>
+        <div class="row g-3">
+            {% for item in priority_items %}
+            <div class="col-md-4">
+                <div class="mini-feature h-100">
+                    <h3 class="h6">{{ item.title }}</h3>
+                    <p>{{ item.text }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div class="card shadow-sm border-0 mt-4">
+    <div class="card-body">
+        <h2 class="h5">{{ workflow_title }}</h2>
+        <div class="row g-3">
+            {% for item in workflow_items %}
+            <div class="col-md-4">
+                <div class="mini-feature h-100">
+                    <h3 class="h6">{{ item.title }}</h3>
+                    <p>{{ item.text }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

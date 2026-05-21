@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Processo #{{ processo.id }} - {{ processo.title }}</h2>
+<p><strong>Lead:</strong> {{ processo.lead_id }}</p>
+<p><strong>Descrição:</strong> {{ processo.description }}</p>
+<hr>
+<h5>Movimentações</h5>
+<ul class="list-group mb-3" id="movimentacoes-list">
+    {% for m in processo.movimentacoes %}
+    <li class="list-group-item">{{ m.description }} <small class="text-muted">{{ m.created_at }}</small></li>
+    {% else %}
+    <li class="list-group-item" data-empty="true">Nenhuma movimentação.</li>
+    {% endfor %}
+</ul>
+
+<h5>Adicionar movimentação</h5>
+<form method="post" action="/processos/{{ processo.id }}/movimentacoes" class="ajax">
+    <div class="mb-3">
+        <textarea name="description" class="form-control" required></textarea>
+    </div>
+    <button class="btn btn-primary">Adicionar</button>
+</form>
+{% endblock %}

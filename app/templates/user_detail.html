@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Usuário #{{ user.id }}</h2>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ user.name }}</h5>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Biografia:</strong> {{ user.bio or 'Não informada' }}</p>
+        <p>
+            <strong>Perfil:</strong>
+            {% if user.role == 'admin' %}
+            <span class="badge text-bg-dark ms-1">Admin</span>
+            {% else %}
+            <span class="badge text-bg-secondary ms-1">Usuário comum</span>
+            {% endif %}
+            <span class="text-muted ms-2">({{ user.role }})</span>
+        </p>
+        <p><strong>Status:</strong> {{ 'Ativo' if user.is_active_account else 'Inativo' }}</p>
+        <a href="/usuarios/{{ user.id }}/editar" class="btn btn-primary">Editar</a>
+        {% if user.is_active_account %}
+        <form method="post" action="/usuarios/{{ user.id }}/desativar" class="d-inline ajax">
+            <button class="btn btn-warning" type="submit">Desativar</button>
+        </form>
+        {% else %}
+        <form method="post" action="/usuarios/{{ user.id }}/ativar" class="d-inline ajax">
+            <button class="btn btn-success" type="submit">Ativar</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Usuários</h2>
+<p><a href="/usuarios/cadastro" class="btn btn-primary">Novo usuário</a></p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Perfil</th>
+            <th>Status</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td>
+                {% if user.role == 'admin' %}
+                <span class="badge text-bg-dark">Admin</span>
+                {% else %}
+                <span class="badge text-bg-secondary">Usuário comum</span>
+                {% endif %}
+                <div class="small text-muted mt-1">{{ user.role }}</div>
+            </td>
+            <td>{{ 'Ativo' if user.is_active_account else 'Inativo' }}</td>
+            <td>
+                <a class="btn btn-sm btn-outline-primary" href="/usuarios/{{ user.id }}">Ver</a>
+                <a class="btn btn-sm btn-outline-secondary" href="/usuarios/{{ user.id }}/editar">Editar</a>
+                {% if user.is_active_account %}
+                <form method="post" action="/usuarios/{{ user.id }}/desativar" class="d-inline ajax">
+                    <button class="btn btn-sm btn-outline-warning" type="submit">Desativar</button>
+                </form>
+                {% else %}
+                <form method="post" action="/usuarios/{{ user.id }}/ativar" class="d-inline ajax">
+                    <button class="btn btn-sm btn-outline-success" type="submit">Ativar</button>
+                </form>
+                {% endif %}
+                <form method="post" action="/usuarios/{{ user.id }}/excluir" class="d-inline ajax">
+                    <button class="btn btn-sm btn-outline-danger" type="submit">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="5">Nenhum usuário cadastrado.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

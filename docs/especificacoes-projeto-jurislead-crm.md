@@ -216,3 +216,61 @@ O sistema executa lembretes e follow-ups automáticos via WhatsApp conforme regr
 ## 15. Resumo técnico
 
 O JurisLead CRM será um CRM jurídico monolítico, construído com Flask, SQLAlchemy, SQLite e Jinja 2, focado em captação de leads, automação de atendimento e controle de processos. A arquitetura proposta equilibra simplicidade de implantação, clareza de código e potencial de evolução para um produto comercial escalável.
+
+## 16. Endpoints implementados (estado atual)
+
+Observação: esta lista descreve os endpoints implementados na versão atual do repositório.
+
+- `POST /leads` — cria um `Lead` a partir de `name`, `email`, `phone`, `origin`.
+- `POST /leads/<id>/triage` — dispara a triagem via serviço de IA (mockável), grava `triage_summary` e `triage_classification` no `Lead`.
+- `POST /consultas` — cria uma `Consulta` (campos: `lead_id`, `scheduled_at` em ISO8601) com validação de data futura.
+- `POST /consultas/<id>/cancel` — cancela uma `Consulta` (altera `status` para `cancelled`).
+- `POST /consultas/<id>/notify` — envia lembrete via integração com API de WhatsApp (mockável).
+- `POST /processos` — cria um `Processo` vinculado a um `Lead` (campos: `lead_id`, `title`, `description`).
+- `POST /processos/<id>/movimentacoes` — adiciona uma `Movimentacao` a um `Processo`.
+- `GET /processos/<id>` — retorna o `Processo` com suas movimentações (`movimentacoes`).
+
+## 17. Variáveis de ambiente relevantes para integrações
+
+Para executar integrações externas (em produção ou testes manuais), as seguintes variáveis são consideradas pelo código:
+
+- `AI_API_URL` — URL base da API de IA (padrão no código: `https://example-ai.local/triage`).
+- `AI_API_KEY` — token Bearer opcional para a API de IA.
+- `WHATSAPP_API_URL` — URL da API de envio de WhatsApp (padrão: `https://example-whatsapp.local/send`).
+- `WHATSAPP_API_TOKEN` — token Bearer opcional para a API de WhatsApp.
+
+Em ambiente de testes automatizados, as chamadas a APIs externas são mockadas (biblioteca `responses`) e as variáveis não são obrigatórias.
+
+## 18. Como executar localmente e rodar a suíte de testes
+
+Recomendação rápida para criar um ambiente local e executar a suíte:
+
+1. criar e ativar um virtualenv na raiz do projeto:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+1. instalar dependências:
+
+```bash
+pip install -r requirements.txt
+```
+
+1. executar a aplicação (opcional):
+
+```bash
+export FLASK_APP=run.py
+flask run
+# ou
+python run.py
+```
+
+1. rodar a suíte de testes automatizados:
+
+```bash
+.venv/bin/python -m pytest -q
+```
+
+Observação: os testes usam banco SQLite em memória e mocks para integrações externas.

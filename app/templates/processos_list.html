@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Processos</h2>
+<div class="mb-4">
+    <h5>Criar novo processo</h5>
+    <form method="post" action="/processos" class="ajax">
+        <div class="mb-3">
+            <label class="form-label">Lead ID</label>
+            <input name="lead_id" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Título</label>
+            <input name="title" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Descrição</label>
+            <textarea name="description" class="form-control"></textarea>
+        </div>
+        <button class="btn btn-primary">Criar</button>
+    </form>
+</div>
+
+<h5>Lista de processos</h5>
+<table class="table" id="processos-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Lead</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in processos %}
+        <tr>
+            <td>{{ p.id }}</td>
+            <td>{{ p.title }}</td>
+            <td>{{ p.lead_id }}</td>
+            <td><a class="btn btn-sm btn-outline-primary" href="/web/processos/{{ p.id }}">Ver</a></td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4">Nenhum processo cadastrado.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

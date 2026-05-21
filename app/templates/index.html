@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h1>Bem-vindo ao JurisLead CRM</h1>
+        <p>Use o menu para adicionar leads, agendar consultas e controlar processos.</p>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Ações rápidas</h5>
+                {% if current_user.is_authenticated %}
+                {% if current_user.role == 'admin' %}
+                <p><a href="/usuarios" class="btn btn-outline-primary">Usuários</a></p>
+                {% endif %}
+                <p><a href="/perfil" class="btn btn-outline-secondary">Meu perfil</a></p>
+                <p><a href="/web/leads/new" class="btn btn-primary">Novo Lead</a></p>
+                <p><a href="/web/processos" class="btn btn-secondary">Ver Processos</a></p>
+                {% else %}
+                <p><a href="/entrar" class="btn btn-primary">Entrar</a></p>
+                <p><a href="/usuarios/cadastro" class="btn btn-outline-secondary">Criar usuário</a></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
