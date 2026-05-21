@@ -81,5 +81,3 @@ python run.py
 ```
 
 Documentação do projeto e especificações completas estão em [docs/descricao-projeto-jurislead-crm.md](docs/descricao-projeto-jurislead-crm.md) e [docs/especificacoes-projeto-jurislead-crm.md](docs/especificacoes-projeto-jurislead-crm.md).
-
-Se quiser, posso também criar um `requirements.txt` mínimo e um `run.py` de exemplo para iniciar rapidamente.
