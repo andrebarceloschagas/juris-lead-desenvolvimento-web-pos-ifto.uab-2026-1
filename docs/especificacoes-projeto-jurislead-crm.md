@@ -1,0 +1,218 @@
+## IFTO / UAB - Campus Araguatins
+
+## Curso de Pós-Graduação Lato Sensu em Desenvolvimento de Sistemas Computacionais
+
+## Disciplina: Desenvolvimento Web
+
+## Alunos: Antonio André Barcelos Chagas e Fabíola Gomes da Rocha
+
+## Especificações do JurisLead CRM
+
+Este documento consolida as especificações funcionais, técnicas e arquiteturais do JurisLead CRM, um sistema voltado para escritórios de advocacia que desejam captar leads, organizar atendimentos e automatizar o relacionamento com clientes.
+
+## 1. Objetivo do sistema
+
+O JurisLead CRM tem como objetivo reduzir a perda de oportunidades comerciais em escritórios de advocacia, centralizando em uma única plataforma o processo de captação, triagem, atendimento, agendamento e acompanhamento de clientes e processos.
+
+O sistema deve permitir:
+
+- captação de leads por landing page;
+- triagem inicial com inteligência artificial;
+- cadastro e acompanhamento de clientes;
+- gestão de agenda e consultas;
+- controle de processos e movimentações;
+- automação de follow-up por WhatsApp;
+- visualização de métricas operacionais e comerciais.
+
+## 2. Escopo do produto
+
+### 2.1 Módulos previstos
+
+- Landing page de captação;
+- Chat com IA para pré-atendimento;
+- Gestão de leads e clientes;
+- Agenda de consultas;
+- Controle de processos jurídicos;
+- Automação de mensagens e lembretes;
+- Painel de indicadores;
+- Administração de usuários e permissões.
+
+### 2.2 Fora do escopo inicial
+
+Nesta primeira versão, o sistema não deve depender de microsserviços nem de infraestrutura complexa. O foco é entregar um monólito bem estruturado, fácil de implantar e de evoluir.
+
+## 3. Arquitetura
+
+O sistema utilizará uma arquitetura monolítica baseada no padrão **MVC (Model-View-Controller)**, adequada ao ecossistema Flask.
+
+- **Controller:** rotas Flask responsáveis por receber requisições HTTP, validar entradas, aplicar regras de negócio e acionar integrações externas.
+- **Model:** camadas de persistência com SQLAlchemy, representando usuários, leads, clientes, processos, agendamentos e registros de mensagens.
+- **View:** templates HTML renderizados no servidor com Jinja 2, com interface responsiva baseada em Bootstrap 5.
+
+## 4. Plataforma tecnológica
+
+- **Linguagem:** Python 3;
+- **Framework web:** Flask;
+- **ORM:** SQLAlchemy;
+- **Banco de dados:** SQLite;
+- **Frontend:** HTML5, CSS3, Bootstrap 5 e Jinja 2;
+- **Autenticação e sessão:** Flask e cookies seguros;
+- **Tarefas agendadas:** APScheduler ou Celery;
+- **Integrações externas:** APIs HTTP para IA e WhatsApp;
+- **Versionamento:** Git e GitHub.
+
+## 5. Estrutura de diretórios
+
+Organização modular para facilitar manutenção e crescimento do projeto:
+
+```text
+jurislead_crm/
+|── docs/
+    |── especificacoes-projeto-jurislead-crm.md
+    |── descricao-projeto-jurislead-crm.md
+├── app/
+│   ├── __init__.py
+│   ├── models.py
+│   ├── routes.py
+│   ├── services/
+│   ├── templates/
+│   └── static/
+├── config.py
+├── requirements.txt
+├── .env
+├── .gitignore
+└── run.py
+```
+
+### 5.1 Responsabilidade dos diretórios
+
+- `app/__init__.py`: criação da aplicação, registro de extensões e blueprints;
+- `app/models.py`: definição das entidades e relacionamentos;
+- `app/routes.py`: controladores e mapeamento de rotas;
+- `app/services/`: serviços de IA, WhatsApp, relatórios e rotinas auxiliares;
+- `app/templates/`: páginas HTML renderizadas no servidor;
+- `app/static/`: estilos, scripts, imagens e recursos estáticos;
+- `config.py`: configurações por ambiente;
+- `run.py`: ponto de entrada da aplicação.
+
+## 6. Convenções de desenvolvimento
+
+- Código Python seguindo PEP 8;
+- Classes de modelo em `PascalCase`;
+- Tabelas e colunas em `snake_case`;
+- Rotas RESTful em minúsculo, com palavras separadas por hífen;
+- Templates nomeados de forma compatível com a rota ou funcionalidade;
+- Validações e mensagens de erro consistentes em toda a aplicação.
+
+## 7. Requisitos funcionais
+
+### 7.1 Captação de leads
+
+O sistema deve permitir que visitantes preencham um formulário em landing page e entrem automaticamente no fluxo de atendimento.
+
+### 7.2 Triagem com IA
+
+O sistema deve usar um serviço de inteligência artificial para coletar informações iniciais do caso, identificar a necessidade do lead e registrar o contexto da conversa.
+
+### 7.3 Cadastro de clientes e leads
+
+O sistema deve armazenar dados cadastrais, histórico de atendimento, origem do lead e status atual do relacionamento.
+
+### 7.4 Agenda
+
+O sistema deve permitir criar, editar, listar e cancelar consultas e compromissos.
+
+### 7.5 Processos
+
+O sistema deve registrar processos jurídicos e manter informações úteis para acompanhamento interno.
+
+### 7.6 Automação de WhatsApp
+
+O sistema deve enviar lembretes automáticos de consultas, retornos e follow-ups com base em regras configuradas.
+
+### 7.7 Painel de métricas
+
+O sistema deve apresentar indicadores como volume de leads, taxa de conversão, atendimentos agendados e evolução de processos.
+
+### 7.8 Administração
+
+O sistema deve permitir o gerenciamento de usuários, perfis, acesso e configurações gerais do escritório.
+
+## 8. Requisitos não funcionais
+
+- Interface responsiva para desktop e dispositivos móveis;
+- Estrutura simples de instalar e manter;
+- Código organizado para facilitar testes e evolução futura;
+- Uso de autenticação segura para perfis restritos;
+- Separação clara entre regras de negócio, persistência e apresentação;
+- Possibilidade de operação com banco SQLite em ambiente inicial.
+
+## 9. Entidades principais
+
+As entidades mínimas do domínio devem contemplar:
+
+- **Usuário:** administra o acesso ao sistema;
+- **Lead:** representa o contato captado na landing page ou no chat;
+- **Cliente:** representa um lead qualificado ou convertido;
+- **Consulta:** agenda de atendimento e retornos;
+- **Processo:** informações relacionadas ao caso jurídico;
+- **Mensagem:** histórico de contato e automações enviadas;
+- **Métrica:** indicadores consolidados para o painel.
+
+## 10. Fluxos principais
+
+### 10.1 Fluxo de captação
+
+O visitante acessa a landing page, preenche os dados iniciais e é registrado como lead.
+
+### 10.2 Fluxo de triagem
+
+A IA realiza perguntas iniciais, coleta o contexto do caso e classifica as informações para o escritório.
+
+### 10.3 Fluxo de atendimento
+
+O advogado ou atendente consulta os dados do lead, agenda reunião e acompanha o histórico do contato.
+
+### 10.4 Fluxo de acompanhamento
+
+O sistema executa lembretes e follow-ups automáticos via WhatsApp conforme regras e prazos definidos.
+
+## 11. Serviços e integrações
+
+- **IA:** integração via API HTTP com provedores como OpenAI ou Google Gemini;
+- **WhatsApp:** integração via serviços como Twilio, Z-API ou Evolution API;
+- **Agendamento de tarefas:** uso de APScheduler ou Celery para rotinas assíncronas;
+- **Relatórios:** geração de consolidações e indicadores para uso gerencial.
+
+## 12. Variáveis de ambiente
+
+| Variável | Descrição |
+| --- | --- |
+| `FLASK_APP` | Arquivo principal de execução, como `run.py`. |
+| `FLASK_ENV` | Ambiente da aplicação, como `development` ou `production`. |
+| `SECRET_KEY` | Chave criptográfica para sessões e segurança. |
+| `DATABASE_URI` | URL do banco SQLite, como `sqlite:///jurislead.db`. |
+| `AI_API_KEY` | Chave de autenticação do provedor de IA. |
+| `WHATSAPP_API_TOKEN` | Token de autenticação da API de WhatsApp. |
+| `ADMIN_DEFAULT_EMAIL` | E-mail inicial do administrador seed. |
+| `ADMIN_DEFAULT_PASS` | Senha inicial do administrador seed. |
+
+## 13. Perfis de usuário
+
+| Perfil | Acesso e autorização | Regras de cadastro |
+| --- | --- | --- |
+| **Administrador** | Controle total do sistema, incluindo usuários, configurações, métricas e dados do escritório. | Conta seed criada na inicialização; pode cadastrar outros administradores. |
+| **Advogado/Atendente** | Acesso à agenda, leads, processos, chat e rotinas operacionais. | Deve ser criado ou inativado por um administrador. |
+| **Cliente (Lead)** | Acesso restrito ao próprio atendimento, consultas e histórico relacionado. | Pode ser criado por autocadastro ou pelo fluxo da IA. |
+
+## 14. Critérios de qualidade
+
+- O sistema deve manter coerência visual e responsividade em todas as páginas;
+- A navegação deve ser simples e orientada à produtividade;
+- As integrações externas devem falhar com mensagens claras e tratamento apropriado de erro;
+- Os dados sensíveis devem ser tratados com cuidado e não expostos indevidamente;
+- O projeto deve permitir evolução futura sem reestruturação completa da base.
+
+## 15. Resumo técnico
+
+O JurisLead CRM será um CRM jurídico monolítico, construído com Flask, SQLAlchemy, SQLite e Jinja 2, focado em captação de leads, automação de atendimento e controle de processos. A arquitetura proposta equilibra simplicidade de implantação, clareza de código e potencial de evolução para um produto comercial escalável.
