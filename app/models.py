@@ -41,7 +41,8 @@ class Lead(db.Model):
     __tablename__ = 'leads'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), nullable=False)
-    email = db.Column(db.String(128), nullable=True)
+    email = db.Column(db.String(128), unique=True, nullable=True)
+    documento = db.Column(db.String(32), unique=True, nullable=True)
     phone = db.Column(db.String(32), nullable=True)
     origin = db.Column(db.String(64), nullable=True)
     status = db.Column(db.String(32), nullable=False, default='new')
@@ -55,11 +56,32 @@ class Lead(db.Model):
             'id': self.id,
             'name': self.name,
             'email': self.email,
+            'documento': self.documento,
             'phone': self.phone,
             'origin': self.origin,
             'status': self.status,
         }
 
+class Cliente(db.Model):
+    __tablename__ = 'clientes'
+    id = db.Column(db.Integer, primary_key=True)
+    lead_id = db.Column(db.Integer, db.ForeignKey('leads.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
+    name = db.Column(db.String(128), nullable=False)
+    documento = db.Column(db.String(32), unique=True, nullable=True)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    
+    lead = db.relationship('Lead', backref=db.backref('cliente', uselist=False))
+    user = db.relationship('User', backref=db.backref('cliente', uselist=False))
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'lead_id': self.lead_id,
+            'user_id': self.user_id,
+            'name': self.name,
+            'documento': self.documento
+        }
 
 @login_manager.user_loader
 def load_user(user_id):

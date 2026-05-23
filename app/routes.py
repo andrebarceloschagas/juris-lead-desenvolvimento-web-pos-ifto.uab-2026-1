@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from . import db, login_manager
-from .models import User, Lead, Processo, Movimentacao, Consulta
+from .models import User, Lead, Cliente, Processo, Movimentacao, Consulta
 from .services.whatsapp_service import send_whatsapp_message
 from .services.ia_service import triage_lead
 from datetime import datetime, timezone
@@ -168,9 +168,19 @@ def public_capture_lead():
         message = 'name is required'
         return (jsonify({'error': message}), 400) if _should_return_json() else (flash(message, 'danger') or redirect(url_for('main.index')))
 
+    email = data.get('email')
+    documento = data.get('documento')
+    if email and Lead.query.filter_by(email=email).first():
+        msg = 'E-mail ou documento ja cadastrado'
+        return (jsonify({'error': msg}), 409) if _should_return_json() else (flash(msg, 'danger') or redirect(url_for('main.index')))
+    if documento and Lead.query.filter_by(documento=documento).first():
+        msg = 'E-mail ou documento ja cadastrado'
+        return (jsonify({'error': msg}), 409) if _should_return_json() else (flash(msg, 'danger') or redirect(url_for('main.index')))
+
     lead = Lead(
         name=name,
-        email=data.get('email'),
+        email=email,
+        documento=documento,
         phone=data.get('phone'),
         origin=data.get('origin') or 'landing',
         status='new',
@@ -548,9 +558,23 @@ def create_lead():
     if not name:
         return jsonify({'error': 'name is required'}), 400
 
+    email = data.get('email')
+    documento = data.get('documento')
+
+    if email:
+        existing_email = Lead.query.filter_by(email=email).first()
+        if existing_email:
+            return jsonify({'error': 'E-mail ou documento ja cadastrado'}), 409
+            
+    if documento:
+        existing_doc = Lead.query.filter_by(documento=documento).first()
+        if existing_doc:
+            return jsonify({'error': 'E-mail ou documento ja cadastrado'}), 409
+
     lead = Lead(
         name=name,
-        email=data.get('email'),
+        email=email,
+        documento=documento,
         phone=data.get('phone'),
         origin=data.get('origin'),
         status='new',
@@ -587,6 +611,56 @@ def lead_triage(lead_id):
         return jsonify({'id': lead.id, 'triage_summary': lead.triage_summary, 'classification': lead.triage_classification}), 200
     flash('Triagem concluída.', 'success')
     return redirect(url_for('main.index'))
+
+
+@bp.route('/leads/<int:lead_id>/convert', methods=['POST'])
+@login_required
+def convert_lead(lead_id):
+    lead = db.session.get(Lead, lead_id)
+    if not lead:
+        return jsonify({'error': 'lead not found'}), 404
+
+    # Verifica se já não foi convertido
+    if getattr(lead, 'cliente', None) or lead.status == 'converted':
+        return jsonify({'error': 'lead already converted'}), 400
+
+    data = _payload()
+    create_user = data.get('create_user', False)
+
+    # Cria usuário se requisitado
+    user_id = None
+    if create_user and lead.email:
+        existing_user = User.query.filter_by(email=lead.email).first()
+        if not existing_user:
+            new_user = User(
+                name=lead.name,
+                email=lead.email,
+                role='cliente'
+            )
+            # Senha aleatória para o cliente, recomenda-se "esqueci a senha" para ele assumir
+            new_user.set_password('123456')
+            db.session.add(new_user)
+            db.session.flush()
+            user_id = new_user.id
+        else:
+            user_id = existing_user.id
+
+    cliente = Cliente(
+        lead_id=lead.id,
+        user_id=user_id,
+        name=lead.name,
+        documento=lead.documento
+    )
+    lead.status = 'converted'
+    db.session.add(cliente)
+    db.session.add(lead)
+    db.session.commit()
+
+    if _should_return_json():
+        return jsonify({'ok': True, 'cliente_id': cliente.id, 'user_id': user_id}), 200
+    
+    flash('Lead convertido em cliente com sucesso.', 'success')
+    return redirect(url_for('main.web_lead_detail', lead_id=lead.id))
 
 
 

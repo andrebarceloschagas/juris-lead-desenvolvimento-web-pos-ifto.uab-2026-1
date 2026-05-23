@@ -208,6 +208,7 @@ Esta seção descreve o estado atual da suíte de testes implementada no reposit
 
 - Testes implementados e automatizados:
   - `TST-LEAD-01`, `TST-LEAD-02` — criação de lead e validação de campos (`tests/test_lead.py`).
+  - `TST-CLI-01`, `TST-CLI-02` — conversão de lead em cliente e prevenção de duplicidade de e-mail/documento (`tests/test_clientes.py` e `tests/test_lead.py`).
   - `TST-IA-01`, `TST-IA-02` — triagem via IA com sucesso e falha (`tests/test_ia_triage.py`).
   - `TST-AGE-01`, `TST-AGE-02` — criação e cancelamento de consultas (`tests/test_agenda.py`).
   - `TST-PROC-01`, `TST-PROC-02` — criação de processo e adição de movimentação (`tests/test_processos.py`).

@@ -17,3 +17,16 @@ def test_create_lead_missing_name(auth_client):
     assert resp.status_code == 400
     data = resp.get_json()
     assert 'error' in data
+
+def test_create_lead_duplicate_email(auth_client):
+    auth_client.post('/leads', json={'name': 'Maria', 'email': 'maria@example.com', 'phone': '123'})
+    resp = auth_client.post('/leads', json={'name': 'Maria Clone', 'email': 'maria@example.com'})
+    assert resp.status_code == 409
+    assert resp.get_json()['error'] == 'E-mail ou documento ja cadastrado'
+
+def test_create_lead_duplicate_document(auth_client):
+    auth_client.post('/leads', json={'name': 'Jose', 'documento': '12345678901'})
+    resp = auth_client.post('/leads', json={'name': 'Jose Clone', 'documento': '12345678901'})
+    assert resp.status_code == 409
+    assert resp.get_json()['error'] == 'E-mail ou documento ja cadastrado'
+

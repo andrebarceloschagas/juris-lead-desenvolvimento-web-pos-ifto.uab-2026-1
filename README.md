@@ -27,7 +27,8 @@ Tecnologias previstas:
 - SQLAlchemy + SQLite
 - Jinja2 + Bootstrap 5
 - Integrações: APIs de IA e WhatsApp
-- Tarefas agendadas: APScheduler ou Celery
+- Tarefas agendadas: Configurado nativamente com APScheduler
+- Módulo de conversão de Leads para Clientes
 
 Estrutura sugerida do projeto:
 
