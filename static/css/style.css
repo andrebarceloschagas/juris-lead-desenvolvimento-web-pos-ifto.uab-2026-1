@@ -1,0 +1,85 @@
+:root {
+    --spacing-base: 1rem;
+    --padding-base: 0.75rem;
+    --color-primary: #0d6efd;
+    --color-danger: #dc3545;
+    --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+}
+
+html,
+body {
+    font-family: var(--font-family-base);
+}
+
+.btn {
+    padding: var(--padding-base);
+}
+
+.field-error {
+    color: var(--color-danger);
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
+
+/* Focus visible for keyboard users */
+:focus {
+    outline: 3px solid rgba(13, 110, 253, 0.25);
+    outline-offset: 2px;
+}
+
+/* Basic skeleton loader */
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 37%, #f0f0f0 63%);
+    background-size: 400% 100%;
+    animation: shimmer 1.4s ease infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 100% 0
+    }
+
+    100% {
+        background-position: -100% 0
+    }
+}
+
+/* Responsive table -> list fallback */
+.responsive-table {
+    width: 100%;
+}
+
+@media (max-width: 767px) {
+    .table-responsive-stack tr {
+        display: block;
+        border-bottom: 1px solid #ddd;
+        margin-bottom: var(--spacing-base);
+    }
+
+    .table-responsive-stack td {
+        display: block;
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+    }
+
+    .table-responsive-stack td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 0;
+        width: 45%;
+        padding-left: 0.5rem;
+        font-weight: 600;
+        text-align: left;
+    }
+}
+
+/* Utility to hide visually but keep accessible */
+.sr-only {
+    position: absolute !important;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+    white-space: nowrap;
+}

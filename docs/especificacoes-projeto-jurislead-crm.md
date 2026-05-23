@@ -274,3 +274,51 @@ python run.py
 ```
 
 Observação: os testes usam banco SQLite em memória e mocks para integrações externas.
+
+## 19. Frontend — comportamento visual, acessibilidade e padrões
+
+Esta seção define exclusivamente correções, refinamentos e regras para o frontend (comportamento visual, componentes, estados de tela e interação). As regras abaixo complementam os requisitos funcionais sem introduzir novas funcionalidades de backend.
+
+### 19.1 Comportamento visual e layout
+- A interface deve preservar consistência visual entre páginas usando `base.html` como template principal e classes utilitárias CSS centralizadas em `static/css/style.css`.
+- Componentes básicos (botões, alertas, formulários, cards e tabelas) devem seguir espaçamentos e tipografia consistentes: margem padrão `1rem`, padding `0.75rem`, e uso de fonte base definida em `:root`.
+- Todas as páginas devem suportar três breakpoints mínimos: `desktop (>=1024px)`, `tablet (>=768px and <1024px)` e `mobile (<768px)`; os layouts devem reflow sem esconder informações essenciais.
+
+### 19.2 Componentes de interface e Design System
+- Padronizar botões com classes: `.btn`, `.btn-primary`, `.btn-secondary`, `.btn-link`.
+- Formulários devem utilizar rótulos (`<label>`) ligados a campos (`for` / `id`) e mensagens de erro inline com a classe `.field-error`.
+- Inputs obrigatórios devem exibir um marcador visual e texto alternativo (`aria-required="true"`).
+- Usar componentes reutilizáveis em templates fragmentados (ex.: `templates/components/_form_field.html`) quando aplicável.
+
+### 19.3 Estados de tela e feedbacks
+- Todos os formulários submetidos devem apresentar estado de `loading` (botão com `aria-busy="true"` ou skeleton) até o término da requisição.
+- Tratar explicitamente estados vazios com mensagens amigáveis e CTA (ex.: "Nenhum lead encontrado — criar novo lead").
+- Exibir mensagens de sucesso e erro na parte superior do conteúdo com roles apropriados (`role="status"` para sucesso, `role="alert"` para erros).
+
+### 19.4 Responsividade
+- Componentes que contenham tabelas devem virar listagem responsiva em telas pequenas, mostrando colunas essenciais e um botão para ver detalhes.
+- Menus de navegação deverão transformar-se em um menu hamburguer no breakpoint mobile.
+
+### 19.5 Acessibilidade (a11y)
+- Navegação por teclado: todos os controles interativos (links, botões, formulários) devem ser alcançáveis via `Tab` e possuir foco visível (outline ou box-shadow).
+- Labels adequados para formulários, uso de `aria-label` quando não existir `label` visível.
+- Contraste de cores deve atender ao mínimo AA (relativo ao texto principal sobre fundo) conforme WCAG 2.1.
+- Elementos dinâmicos (modais, alerts, atualizações AJAX) devem usar `aria-live` ou `role` apropriado para anunciar mudanças a leitores de tela.
+
+### 19.6 Validações visuais e mensagens de erro
+- Mensagens de erro devem ser claras, concisas e associadas ao campo com `aria-describedby` apontando para o elemento de mensagem.
+- Em caso de erro de validação de formulário, o primeiro campo inválido deve receber foco automaticamente.
+
+### 19.7 Integração frontend/backend e regras de renderização
+- O frontend deve assumir os contratos REST já descritos; para estados de loading/erro o frontend deve mapear respostas HTTP a mensagens amigáveis: `400` → validação, `401` → autenticação, `404` → recurso não encontrado, `409` → conflito/duplicidade, `500` → erro interno.
+- Renderização condicional: componentes que dependem de dados devem renderizar três estados: `loading`, `empty` (sem dados) e `ready` (dados carregados).
+
+### 19.8 Tratamento de formulários e padrões de interação
+- Submissão de formulários via AJAX deve desabilitar o botão de envio até resposta; permitir re-tentativa em caso de timeout com contador de tentativas curto.
+- Confirm dialogs para ações destrutivas (ex.: excluir lead) com role `dialog` e foco gerenciado.
+
+### 19.9 Padronização do design system
+- Documentar classes utilitárias (cores, espaçamento, tipografia) em `static/css/style.css` e manter uso consistente.
+- Evitar estilos inline; preferir classes CSS e variáveis `:root`.
+
+Estas regras são mandatórias para a próxima versão e devem ser testadas com os cenários de frontend definidos em `docs/testing.md`.

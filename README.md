@@ -97,6 +97,9 @@ Documentação da API e exemplos de uso:
 - Exemplos em cURL: [docs/api-curl-examples.md](docs/api-curl-examples.md)
  - Postman collection: [docs/postman-collection.json](docs/postman-collection.json)
 
+Frontend e testes
+- Plano de testes frontend: [docs/testing.md](docs/testing.md)
+
 ### Importar a Postman collection
 
 Você pode importar a collection gerada de duas maneiras:

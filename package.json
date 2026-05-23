@@ -1,0 +1,10 @@
+{
+  "name": "jurislead-crm-frontend-tests",
+  "version": "0.1.0",
+  "scripts": {
+    "test:e2e": "playwright test",
+    "test:cypress": "cypress run",
+    "test:a11y": "node ./scripts/run-axe.js"
+  },
+  "devDependencies": {}
+}

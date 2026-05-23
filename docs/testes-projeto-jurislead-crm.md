@@ -236,3 +236,5 @@ pip install -r requirements.txt
 ```
 
 Observação: os testes foram projetados para rodar de forma determinística (SQLite em memória, `responses` para HTTP mocks e `freezegun` para controle de tempo). Se quiser que eu atualize os testes para cobrir casos adicionais ou adicionar integração contínua (GitHub Actions), posso incluir um workflow básico.
+
+Nota sobre testes frontend: os cenários de teste frontend, acessibilidade e E2E estão descritos em [docs/testing.md](docs/testing.md). Recomenda-se implementar um job CI separado para E2E e regressão visual.

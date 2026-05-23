@@ -1,23 +1,26 @@
 {% extends 'base.html' %}
 {% block content %}
 <h2>Novo Lead</h2>
-<form method="post" action="/leads" class="ajax">
+<form method="post" action="/leads" class="ajax" id="lead-form">
+    <div id="form-status" aria-live="polite" class="mb-3 sr-only"></div>
     <div class="mb-3">
-        <label class="form-label">Nome</label>
-        <input name="name" class="form-control" required>
+        <label for="name" class="form-label">Nome <span class="text-danger" aria-hidden="true">*</span></label>
+        <input id="name" name="name" class="form-control" required aria-required="true">
+        <div id="name-error" class="field-error" aria-live="assertive"></div>
     </div>
     <div class="mb-3">
-        <label class="form-label">Email</label>
-        <input name="email" class="form-control" type="email">
+        <label for="email" class="form-label">Email</label>
+        <input id="email" name="email" class="form-control" type="email" aria-describedby="email-help">
+        <div id="email-error" class="field-error" aria-live="assertive"></div>
     </div>
     <div class="mb-3">
-        <label class="form-label">Telefone</label>
-        <input name="phone" class="form-control">
+        <label for="phone" class="form-label">Telefone</label>
+        <input id="phone" name="phone" class="form-control">
     </div>
     <div class="mb-3">
-        <label class="form-label">Origem</label>
-        <input name="origin" class="form-control">
+        <label for="origin" class="form-label">Origem</label>
+        <input id="origin" name="origin" class="form-control">
     </div>
-    <button class="btn btn-primary" type="submit">Cadastrar</button>
+    <button id="lead-submit" class="btn btn-primary" type="submit">Cadastrar</button>
 </form>
 {% endblock %}
