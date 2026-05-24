@@ -1,5 +1,13 @@
 # Roteiro de Apresentação e Vídeo - JurisLead CRM
 
+## IFTO / UAB - Campus Araguatins
+
+## Curso de Pós-Graduação Lato Sensu em Desenvolvimento de Sistemas Computacionais
+
+## Disciplina: Desenvolvimento Web
+
+## Alunos: Antonio André Barcelos Chagas e Fabíola Gomes da Rocha
+
 Este documento traz um roteiro pronto para:
 
 - montar os slides;
