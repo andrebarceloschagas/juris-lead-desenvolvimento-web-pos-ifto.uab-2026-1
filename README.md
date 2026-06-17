@@ -1,131 +1,94 @@
-# JurisLead CRM
+# JurisLead CRM - Ecossistema Integrado
 
 ## IFTO / UAB - Campus Araguatins
-
 ## Curso de Pós-Graduação Lato Sensu em Desenvolvimento de Sistemas Computacionais
-
-## Disciplina: Desenvolvimento Web
-
+## Disciplinas: Desenvolvimento Web & Desenvolvimento Mobile
 ## Alunos: Antonio André Barcelos Chagas e Fabíola Gomes da Rocha
 
-JurisLead CRM é um projeto de plataforma web para escritórios de advocacia focada em captação de leads, triagem com IA, gestão de agenda, controle de processos e automação de follow-ups por WhatsApp.
+O **JurisLead CRM** é uma plataforma completa para escritórios de advocacia, focada na captação de leads, triagem com Inteligência Artificial, gestão de agenda e controle de processos. O ecossistema é composto por uma aplicação Web robusta e um aplicativo Mobile multiplataforma (Android/iOS), integrados via uma API REST centralizada.
 
-Principais características:
+---
 
-- Landing page para captação de leads
-- Chat inicial com IA para triagem
-- Cadastro de clientes e leads
-- Agenda de consultas
-- Controle de processos jurídicos
-- Follow-up automático via WhatsApp
-- Painel de métricas e administração de usuários
+## 🚀 Estrutura do Projeto
 
-Tecnologias previstas:
+O repositório está dividido em duas frentes principais:
 
-- Python 3
-- Flask (MVC)
-- SQLAlchemy + SQLite
-- Jinja2 + Bootstrap 5
-- Integrações: APIs de IA e WhatsApp
-- Tarefas agendadas: Configurado nativamente com APScheduler
-- Módulo de conversão de Leads para Clientes
+- **`web/`**: Aplicação Web (Flask) e Backend (API REST).
+- **`mobile/`**: Aplicativo Móvel desenvolvido com Flutter.
 
-Estrutura sugerida do projeto:
+### Tecnologias Principais
+
+- **Backend:** Python 3, Flask, SQLAlchemy, SQLite, APScheduler.
+- **Frontend Web:** Jinja2, Bootstrap 5.
+- **Frontend Mobile:** Dart, Flutter.
+- **IA:** Integração com Google Gemini para triagem de leads.
+- **Comunicação:** Integração com APIs de WhatsApp para automação.
+- **Infraestrutura:** Docker, GitHub Actions (CI/CD).
+
+---
+
+## 📁 Organização de Pastas
 
 ```text
-jurislead_crm/
-├── docs/
-│   ├── especificacoes-projeto-jurislead-crm.md
-│   └── descricao-projeto-jurislead-crm.md
-├── app/
-│   ├── __init__.py
-│   ├── models.py
-│   ├── routes.py
-│   ├── services/
-│   │   ├── ia_service.py
-│   │   └── whatsapp_service.py
-│   ├── templates/
-│   └── static/
-├── tests/
-│   ├── test_lead.py
-│   ├── test_ia_triage.py
-│   ├── test_agenda.py
-│   ├── test_processos.py
-|	└── test_whatsapp.py
-├── config.py
-├── requirements.txt
-├── .env
-└── run.py
+jurislead-projeto/
+ ├─ web/                    # Backend e Interface Web
+ │   ├─ app/                # Código-fonte Flask (Models, Routes, Services)
+ │   ├─ docs/               # Documentação técnica Web
+ │   ├─ tests/              # Testes automatizados (Pytest)
+ │   └─ run.py              # Inicialização do Servidor
+ │
+ ├─ mobile/                 # Aplicativo Flutter
+ │   ├─ app_mobile/         # Código-fonte Dart (Views, ViewModels, Services)
+ │   └─ docs/               # Documentação técnica Mobile
+ │
+ └─ README.md               # Este arquivo (Visão Geral)
 ```
 
-Como rodar (desenvolvimento):
+---
 
-1. Criar virtualenv e ativar:
+## ⚙️ Como Executar
 
-```bash
-python3 -m venv venv
-source venv/bin/activate
-```
-
-1. Instalar dependências:
+### 1. Backend (API & Web)
+Navegue até a pasta `web/` e siga as instruções detalhadas no [README do Web](web/README.md) (se disponível) ou execute os comandos básicos:
 
 ```bash
+cd web
+python3 -m venv .venv
+source .venv/bin/activate  # ou .venv\Scripts\activate no Windows
 pip install -r requirements.txt
-```
-
-1. Exportar variáveis de ambiente (exemplo):
-
-```bash
-export FLASK_APP=run.py
-export FLASK_ENV=development
-export SECRET_KEY="sua_chave"
-```
-
-1. Executar a aplicação:
-
-```bash
-flask run
-# ou
 python run.py
 ```
 
-Documentação do projeto e especificações completas estão em [docs/descricao-projeto-jurislead-crm.md](docs/descricao-projeto-jurislead-crm.md) e [docs/especificacoes-projeto-jurislead-crm.md](docs/especificacoes-projeto-jurislead-crm.md).
-
-Documentação da API e exemplos de uso:
-
-- Endpoints: [docs/api-endpoints.md](docs/api-endpoints.md)
-- Exemplos em cURL: [docs/api-curl-examples.md](docs/api-curl-examples.md)
- - Postman collection: [docs/postman-collection.json](docs/postman-collection.json)
-
-Frontend e testes
-- Plano de testes frontend: [docs/testing.md](docs/testing.md)
-
-### Importar a Postman collection
-
-Você pode importar a collection gerada de duas maneiras:
-
-- Pelo app Postman (interface): `File` → `Import` → selecione o arquivo [docs/postman-collection.json](docs/postman-collection.json).
-
-- Pela CLI (executar com Newman):
+### 2. Frontend Mobile (Flutter)
+Navegue até a pasta `mobile/app_mobile/` (após a inicialização do projeto Flutter):
 
 ```bash
-# instalar newman (se necessário)
-npm install -g newman
-
-# executar a collection apontando para a URL base
-newman run docs/postman-collection.json --env-var "base_url=http://localhost:5000"
+cd mobile/app_mobile
+flutter pub get
+flutter run
 ```
 
-## Testes automatizados
+---
 
-Para executar a suíte de testes automatizados (recomenda-se usar o virtualenv acima):
+## 📝 Documentação Detalhada
 
-```bash
-.venv/bin/python -m pytest -q
-```
+Para informações específicas de cada módulo, consulte as pastas `docs/`:
 
-Para ver relatório de cobertura:
+- **Web:** [web/docs/especificacoes-projeto-jurislead-crm.md](web/docs/especificacoes-projeto-jurislead-crm.md)
+- **Mobile:** [mobile/docs/especificacoes-projeto-jurislead-crm-mobile.md](mobile/docs/especificacoes-projeto-jurislead-crm-mobile.md)
+- **API Endpoints:** [web/docs/api-endpoints.md](web/docs/api-endpoints.md)
 
-```bash
-.venv/bin/python -m pytest --cov=app --cov-report=term-missing
-```
+---
+
+## 🛡️ Cibersegurança e LGPD
+
+O projeto adota boas práticas de segurança, incluindo:
+- Autenticação via **JWT** para o app mobile e Sessões Seguras para Web.
+- Criptografia de dados sensíveis e variáveis de ambiente.
+- Conformidade com a **LGPD** no tratamento de dados de leads e clientes.
+
+---
+
+## 👥 Equipe
+- **Antonio André Barcelos Chagas**
+- **Fabíola Gomes da Rocha**
