@@ -13,6 +13,7 @@ Este documento detalha as especificações técnicas, funcionais e arquiteturais
 ## 1. Objetivo do sistema
 
 O objetivo do JurisLead CRM Mobile é estender as funcionalidades da plataforma web para o ambiente móvel, garantindo que o profissional jurídico possa:
+
 - Acompanhar e qualificar leads em qualquer lugar;
 - Gerenciar a agenda de consultas e compromissos;
 - Consultar e atualizar movimentações de processos;
@@ -22,6 +23,7 @@ O objetivo do JurisLead CRM Mobile é estender as funcionalidades da plataforma 
 ## 2. Escopo do produto
 
 ### 2.1 Módulos previstos
+
 - **Autenticação Segura:** Login via JWT e gerenciamento de sessão;
 - **Gestão de Leads:** Listagem, filtros, detalhes e criação de leads;
 - **Triagem com IA:** Interface para acionar e visualizar resumos de triagem;
@@ -31,6 +33,7 @@ O objetivo do JurisLead CRM Mobile é estender as funcionalidades da plataforma 
 - **Dashboard Mobile:** Visualização rápida de métricas e indicadores.
 
 ### 2.2 Fora do escopo inicial
+
 - Funcionalidades offline complexas (edição de dados sem conexão);
 - Chat em tempo real (substituído por integração com WhatsApp);
 - Pagamentos integrados no aplicativo.
@@ -85,21 +88,27 @@ mobile/app_mobile/
 ## 7. Requisitos funcionais
 
 ### 7.1 Autenticação
+
 O sistema deve permitir login seguro com e-mail e senha, suportando a persistência da sessão via token JWT.
 
 ### 7.2 Gestão de Leads
+
 Listagem de leads com pesquisa e filtros por status (Novo, Triado, Convertido). Visualização completa do histórico e dados de contato.
 
 ### 7.3 Triagem e IA
+
 Permitir que o usuário acione a triagem por IA e visualize o resumo gerado diretamente no celular.
 
 ### 7.4 Agenda Mobile
+
 Visualização dos compromissos do dia/semana com opção de agendar novas consultas ou cancelar existentes.
 
 ### 7.5 Processos e Movimentações
+
 Consulta rápida a processos ativos e inclusão de novas movimentações (textuais) com registro automático de data.
 
 ### 7.6 Dashboard e Indicadores
+
 Tela inicial com cards resumindo: total de leads, consultas pendentes e processos abertos.
 
 ## 8. Requisitos não funcionais
