@@ -139,5 +139,5 @@ A API Flask deverá ser estendida para suportar o prefixo `/api/v1` e autentica�
 
 | Variável | Descrição |
 | --- | --- |
-| `BASE_URL` | URL base da API Backend (ex: https://api.jurislead.com/api/v1) |
+| `BASE_URL` | URL base da API Backend (ex: <https://api.jurislead.com/api/v1>) |
 | `ENV` | Ambiente (development/production) |
