@@ -115,7 +115,18 @@ A execução local com Pytest cobre todo o projeto web:
 
 ---
 
-## 6. Arquivos Modificados e Criados (Mapeamento Rastreável)
+## 6. Relato de Andamento do Desenvolvimento Mobile
+
+Como parte da transição para a versão móvel do **JurisLead CRM**, apresenta-se a seguir o status de andamento do desenvolvimento do aplicativo mobile:
+
+* **Plataforma Tecnológica:** Decidiu-se pela utilização do ecossistema **Dart/Flutter** para o desenvolvimento da aplicação mobile. O Flutter foi escolhido por viabilizar a criação de uma aplicação nativa de alta performance e interface rica para Android e iOS a partir de uma única base de código.
+* **Instalação do Ambiente de Desenvolvimento:** O ambiente local de desenvolvimento foi configurado com sucesso no sistema operacional Windows utilizando a IDE **Android Studio** integrada ao Flutter SDK e gerenciadores de emuladores virtuais.
+* **Inicialização do Projeto:** O projeto foi inicializado com sucesso e a estrutura de diretórios do módulo `mobile` está pronta. O foco principal nesta fase foi a refatoração e preparação completa do backend (conforme documentado acima) para prover suporte de autenticação por tokens e consumo de endpoints limpos em JSON pela aplicação móvel.
+* **Dificuldades Encontradas:** Até o momento atual, nenhuma dificuldade técnica ou de configuração de ambiente foi encontrada.
+
+---
+
+## 7. Arquivos Modificados e Criados (Mapeamento Rastreável)
 
 Abaixo listamos as principais modificações rastreáveis efetuadas no repositório:
 

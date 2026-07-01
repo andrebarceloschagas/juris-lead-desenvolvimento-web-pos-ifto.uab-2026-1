@@ -306,3 +306,23 @@ def get_processo(proc_id):
         return jsonify({'error': 'processo not found'}), 404
         
     return jsonify(proc.to_dict(include_movs=True)), 200
+
+@api_bp.route('/metrics', methods=['GET'])
+@jwt_required()
+def get_metrics():
+    user = get_current_user()
+    if not user:
+        return jsonify({'error': 'Unauthorized'}), 401
+        
+    if user.role not in {'admin', 'manager', 'advogado', 'atendente'}:
+        return jsonify({'error': 'Acesso restrito a este perfil'}), 403
+        
+    total_leads = Lead.query.count()
+    pending_consultas = Consulta.query.filter(Consulta.status == 'scheduled').count()
+    open_processos = Processo.query.filter(Processo.status == 'open').count()
+    
+    return jsonify({
+        'total_leads': total_leads,
+        'pending_consultas': pending_consultas,
+        'open_processos': open_processos
+    }), 200
