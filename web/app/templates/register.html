@@ -2,6 +2,7 @@
 {% block content %}
 <h2>Cadastro de Usuário</h2>
 <form method="post" action="/usuarios/cadastro" class="ajax">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <div class="mb-3">
         <label class="form-label">Nome</label>
         <input name="name" class="form-control" required>

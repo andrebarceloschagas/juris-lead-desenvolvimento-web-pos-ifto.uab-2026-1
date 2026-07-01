@@ -2,6 +2,7 @@
 {% block content %}
 <h2>Novo Lead</h2>
 <form method="post" action="/leads" class="ajax" id="lead-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <div id="form-status" aria-live="polite" class="mb-3 sr-only"></div>
     <div class="mb-3">
         <label for="name" class="form-label">Nome <span class="text-danger" aria-hidden="true">*</span></label>

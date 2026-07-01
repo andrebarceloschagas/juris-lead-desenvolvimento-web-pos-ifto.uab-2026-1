@@ -42,6 +42,7 @@
                 {% endif %}
                 <form method="post" action="/leads/{{ lead.id }}/excluir" class="ajax"
                     onsubmit="return confirm('Excluir este lead?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button class="btn btn-outline-danger d-block mb-2" type="submit">Excluir lead</button>
                 </form>
                 <a class="btn btn-outline-primary d-block mb-2" href="/web/leads">Voltar para a lista</a>

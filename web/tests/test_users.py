@@ -48,22 +48,28 @@ def test_profile_update(client, app):
         assert user.bio == 'Perfil atualizado'
 
 
-def test_user_edit_page_shows_role_badge(client):
+def test_user_edit_page_shows_role_badge(client, app):
     client.post('/usuarios/cadastro', json={
         'name': 'Edit Badge Admin',
         'email': 'edit.badge.admin@example.com',
         'password': 'secret123',
-        'confirm_password': 'secret123',
-        'role': 'admin'
+        'confirm_password': 'secret123'
     })
+    with app.app_context():
+        from app.models import User
+        from app import db
+        user = User.query.filter_by(email='edit.badge.admin@example.com').first()
+        if user:
+            user.role = 'admin'
+            db.session.add(user)
+            db.session.commit()
     client.post('/entrar', json={'email': 'edit.badge.admin@example.com', 'password': 'secret123'})
 
     client.post('/usuarios/cadastro', json={
         'name': 'Edit Badge User',
         'email': 'edit.badge@example.com',
         'password': 'secret123',
-        'confirm_password': 'secret123',
-        'role': 'user'
+        'confirm_password': 'secret123'
     })
 
     with client.application.app_context():
@@ -83,9 +89,16 @@ def test_user_list_edit_and_delete(client, app):
         'name': 'Admin',
         'email': 'admin@example.com',
         'password': 'secret123',
-        'confirm_password': 'secret123',
-        'role': 'admin'
+        'confirm_password': 'secret123'
     })
+    with app.app_context():
+        from app.models import User
+        from app import db
+        user = User.query.filter_by(email='admin@example.com').first()
+        if user:
+            user.role = 'admin'
+            db.session.add(user)
+            db.session.commit()
     client.post('/entrar', json={'email': 'admin@example.com', 'password': 'secret123'})
 
     second = client.post('/usuarios/cadastro', json={
@@ -129,10 +142,17 @@ def test_user_detail_shows_role_badge(client, app):
         'name': 'Admin Badge',
         'email': 'admin.badge@example.com',
         'password': 'secret123',
-        'confirm_password': 'secret123',
-        'role': 'admin'
+        'confirm_password': 'secret123'
     })
     admin_id = admin.get_json()['id']
+    with app.app_context():
+        from app.models import User
+        from app import db
+        user = User.query.filter_by(email='admin.badge@example.com').first()
+        if user:
+            user.role = 'admin'
+            db.session.add(user)
+            db.session.commit()
 
     client.post('/entrar', json={'email': 'admin.badge@example.com', 'password': 'secret123'})
     detail = client.get(f'/usuarios/{admin_id}')
@@ -147,10 +167,17 @@ def test_user_activation_and_inactive_login(client, app):
         'name': 'Admin 2',
         'email': 'admin2@example.com',
         'password': 'secret123',
-        'confirm_password': 'secret123',
-        'role': 'admin'
+        'confirm_password': 'secret123'
     })
     assert admin.status_code == 201
+    with app.app_context():
+        from app.models import User
+        from app import db
+        user = User.query.filter_by(email='admin2@example.com').first()
+        if user:
+            user.role = 'admin'
+            db.session.add(user)
+            db.session.commit()
     client.post('/entrar', json={'email': 'admin2@example.com', 'password': 'secret123'})
 
     target = client.post('/usuarios/cadastro', json={

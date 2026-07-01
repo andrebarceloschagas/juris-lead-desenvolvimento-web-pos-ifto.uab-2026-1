@@ -1,7 +1,7 @@
-from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash
+from flask import Blueprint, request, jsonify, render_template, redirect, url_for, flash, current_app
 from flask_login import login_user, logout_user, login_required, current_user
 from . import db, login_manager
-from .models import User, Lead, Cliente, Processo, Movimentacao, Consulta
+from .models import User, Lead, Cliente, Processo, Movimentacao, Consulta, Mensagem
 from .services.whatsapp_service import send_whatsapp_message
 from .services.ia_service import triage_lead
 from datetime import datetime, timezone
@@ -219,7 +219,7 @@ def register():
         message = 'email já cadastrado'
         return (jsonify({'error': message}), 400) if _should_return_json() else (flash(message, 'danger') or render_template('register.html'), 400)
 
-    user = User(name=name, email=email, bio=data.get('bio'), role=data.get('role') or 'user')
+    user = User(name=name, email=email, bio=data.get('bio'), role='user')
     user.set_password(password)
     db.session.add(user)
     db.session.commit()
@@ -596,8 +596,9 @@ def lead_triage(lead_id):
         return jsonify({'error': 'lead not found'}), 404
     try:
         result = triage_lead(lead)
-    except Exception as exc:
-        return jsonify({'error': 'ai_service_failure', 'detail': str(exc)}), 502
+    except Exception:
+        current_app.logger.exception('Falha na triagem do lead')
+        return jsonify({'error': 'ai_service_failure'}), 502
 
     lead.triage_summary = result.get('summary')
     lead.triage_classification = result.get('classification')
@@ -614,7 +615,7 @@ def lead_triage(lead_id):
 
 
 @bp.route('/leads/<int:lead_id>/convert', methods=['POST'])
-@login_required
+@roles_required('admin', 'manager', 'advogado', 'atendente')
 def convert_lead(lead_id):
     lead = db.session.get(Lead, lead_id)
     if not lead:
@@ -632,13 +633,14 @@ def convert_lead(lead_id):
     if create_user and lead.email:
         existing_user = User.query.filter_by(email=lead.email).first()
         if not existing_user:
+            import secrets
             new_user = User(
                 name=lead.name,
                 email=lead.email,
                 role='cliente'
             )
             # Senha aleatória para o cliente, recomenda-se "esqueci a senha" para ele assumir
-            new_user.set_password('123456')
+            new_user.set_password(secrets.token_urlsafe(16))
             db.session.add(new_user)
             db.session.flush()
             user_id = new_user.id
@@ -777,8 +779,29 @@ def notify_consulta_whatsapp(consulta_id):
     message = f"Lembrete: sua consulta está agendada para {scheduled}."
     try:
         result = send_whatsapp_message(phone, message)
-    except Exception as exc:
-        return jsonify({'error': 'whatsapp_service_failure', 'detail': str(exc)}), 502
+        
+        # Gravar histórico com status 'sent'
+        msg_log = Mensagem(
+            lead_id=lead.id,
+            channel='whatsapp',
+            content=message,
+            status='sent'
+        )
+        db.session.add(msg_log)
+        db.session.commit()
+    except Exception:
+        # Gravar histórico com status 'failed'
+        msg_log = Mensagem(
+            lead_id=lead.id,
+            channel='whatsapp',
+            content=message,
+            status='failed'
+        )
+        db.session.add(msg_log)
+        db.session.commit()
+        
+        current_app.logger.exception('Falha no envio de notificação via WhatsApp')
+        return jsonify({'error': 'whatsapp_service_failure'}), 502
 
     if _should_return_json():
         return jsonify({'ok': True, 'result': result}), 200

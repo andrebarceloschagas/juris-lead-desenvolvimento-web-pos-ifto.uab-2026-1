@@ -20,6 +20,7 @@
                 <h2 class="h4 mb-3">Fale com o escritório</h2>
                 <p class="text-muted">Envie seus dados e o atendimento começa pelo fluxo de captação.</p>
                 <form method="post" action="/captacao" class="ajax">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <div class="mb-3">
                         <label class="form-label">Nome</label>
                         <input name="name" class="form-control form-control-lg" required>

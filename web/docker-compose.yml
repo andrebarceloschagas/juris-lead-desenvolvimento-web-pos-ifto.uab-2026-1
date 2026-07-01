@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - DATABASE_URI=sqlite:////app/data/jurislead.db
+      - SECRET_KEY=prod_super_secret_key_123!
+      - JWT_SECRET_KEY=prod_jwt_secret_key_987!
+      # Mocks/URLs padrão para integrações se não informados
+      - AI_API_URL=https://example-ai.local/triage
+      - WHATSAPP_API_URL=https://example-whatsapp.local/send
+    volumes:
+      - sqlite_data:/app/data
+
+volumes:
+  sqlite_data:

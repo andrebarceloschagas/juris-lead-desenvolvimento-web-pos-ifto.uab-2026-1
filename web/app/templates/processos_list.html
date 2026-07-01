@@ -4,6 +4,7 @@
 <div class="mb-4">
     <h5>Criar novo processo</h5>
     <form method="post" action="/processos" class="ajax">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <div class="mb-3">
             <label class="form-label">Lead ID</label>
             <input name="lead_id" class="form-control" required>

@@ -65,6 +65,7 @@
                     <a class="btn btn-sm btn-outline-primary mb-1" href="/web/leads/{{ lead.id }}">Ver</a>
                     <form method="post" action="/leads/{{ lead.id }}/excluir" class="d-inline ajax"
                         onsubmit="return confirm('Excluir este lead?');">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <button class="btn btn-sm btn-outline-danger mb-1" type="submit">Excluir</button>
                     </form>
                 </td>

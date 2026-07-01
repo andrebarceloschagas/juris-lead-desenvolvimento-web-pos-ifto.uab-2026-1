@@ -62,9 +62,16 @@ def test_home_page_varies_by_profile(app, client):
         'name': 'Manager Home',
         'email': 'home-manager@example.com',
         'password': 'secret123',
-        'confirm_password': 'secret123',
-        'role': 'manager',
+        'confirm_password': 'secret123'
     })
+    with app.app_context():
+        from app.models import User
+        from app import db
+        user = User.query.filter_by(email='home-manager@example.com').first()
+        if user:
+            user.role = 'manager'
+            db.session.add(user)
+            db.session.commit()
     manager_client.post('/entrar', json={'email': 'home-manager@example.com', 'password': 'secret123'})
 
     manager_home = manager_client.get('/')
@@ -80,9 +87,16 @@ def test_home_page_varies_by_profile(app, client):
         'name': 'Admin Home',
         'email': 'home-admin@example.com',
         'password': 'secret123',
-        'confirm_password': 'secret123',
-        'role': 'admin',
+        'confirm_password': 'secret123'
     })
+    with app.app_context():
+        from app.models import User
+        from app import db
+        user = User.query.filter_by(email='home-admin@example.com').first()
+        if user:
+            user.role = 'admin'
+            db.session.add(user)
+            db.session.commit()
     admin_client.post('/entrar', json={'email': 'home-admin@example.com', 'password': 'secret123'})
 
     admin_home = admin_client.get('/')
@@ -98,9 +112,16 @@ def test_operational_process_views_allow_manager(app):
         'name': 'Manager Processes',
         'email': 'manager-processos@example.com',
         'password': 'secret123',
-        'confirm_password': 'secret123',
-        'role': 'manager',
+        'confirm_password': 'secret123'
     })
+    with app.app_context():
+        from app.models import User
+        from app import db
+        user = User.query.filter_by(email='manager-processos@example.com').first()
+        if user:
+            user.role = 'manager'
+            db.session.add(user)
+            db.session.commit()
     manager_client.post('/entrar', json={'email': 'manager-processos@example.com', 'password': 'secret123'})
 
     resp = manager_client.get('/web/processos')

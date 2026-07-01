@@ -15,6 +15,7 @@
 
 <h5>Adicionar movimentação</h5>
 <form method="post" action="/processos/{{ processo.id }}/movimentacoes" class="ajax">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <div class="mb-3">
         <textarea name="description" class="form-control" required></textarea>
     </div>

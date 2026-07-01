@@ -33,14 +33,17 @@
                 <a class="btn btn-sm btn-outline-secondary" href="/usuarios/{{ user.id }}/editar">Editar</a>
                 {% if user.is_active_account %}
                 <form method="post" action="/usuarios/{{ user.id }}/desativar" class="d-inline ajax">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button class="btn btn-sm btn-outline-warning" type="submit">Desativar</button>
                 </form>
                 {% else %}
                 <form method="post" action="/usuarios/{{ user.id }}/ativar" class="d-inline ajax">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button class="btn btn-sm btn-outline-success" type="submit">Ativar</button>
                 </form>
                 {% endif %}
                 <form method="post" action="/usuarios/{{ user.id }}/excluir" class="d-inline ajax">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <button class="btn btn-sm btn-outline-danger" type="submit">Excluir</button>
                 </form>
             </td>
