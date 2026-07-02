@@ -1,40 +1,80 @@
-import 'dart:convert';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/user.dart';
-import 'api_client.dart';
+import 'api_service.dart';
 
 class AuthService {
-  final ApiClient _apiClient = ApiClient();
-  final storage = const FlutterSecureStorage();
+  final ApiService _apiService = ApiService();
 
   Future<User?> login(String email, String password) async {
     try {
-      final response = await _apiClient.post('/auth/login', {
+      final data = await _apiService.post('/auth/login', {
         'email': email,
         'password': password,
       });
 
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+      if (data != null && data['access_token'] != null) {
         final token = data['access_token'];
         final userData = data['user'];
 
-        await storage.write(key: 'jwt_token', value: token);
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('token', token);
         return User.fromJson(userData);
-      } else {
-        throw Exception('Falha no login: ${response.body}');
       }
+      return null;
     } catch (e) {
       rethrow;
     }
   }
 
   Future<void> logout() async {
-    await storage.delete(key: 'jwt_token');
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
   }
 
   Future<bool> isAuthenticated() async {
-    final token = await storage.read(key: 'jwt_token');
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
     return token != null;
+  }
+
+  Future<User?> getPerfil() async {
+    try {
+      final data = await _apiService.get('/perfil');
+      if (data != null) {
+        return User.fromJson(data);
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<bool> register(String name, String email, String password, String? bio) async {
+    try {
+      final data = await _apiService.post('/auth/register', {
+        'name': name,
+        'email': email,
+        'password': password,
+        'bio': bio,
+      });
+      return data != null;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<User?> updatePerfil(String name, String? bio) async {
+    try {
+      final data = await _apiService.post('/perfil', {
+        'name': name,
+        'bio': bio,
+      });
+      if (data != null) {
+        return User.fromJson(data);
+      }
+      return null;
+    } catch (e) {
+      rethrow;
+    }
   }
 }

@@ -26,7 +26,7 @@ class DashboardViewModel extends ChangeNotifier {
     try {
       final metrics = await _dashboardService.getMetrics();
       _totalLeads = metrics['total_leads'] ?? 0;
-      _pendingConsultas = metrics['pending_consultas'] ?? 0;
+      _pendingConsultas = metrics['consultas_agendadas'] ?? metrics['pending_consultas'] ?? 0;
       _openProcessos = metrics['open_processos'] ?? 0;
     } catch (e) {
       _errorMessage = e.toString();

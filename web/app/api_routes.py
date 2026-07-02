@@ -45,6 +45,26 @@ def login():
         }
     }), 200
 
+@api_bp.route('/auth/register', methods=['POST'])
+def api_register():
+    data = request.get_json(silent=True) or {}
+    name = (data.get('name') or '').strip()
+    email = (data.get('email') or '').strip().lower()
+    password = data.get('password') or ''
+    
+    if not name or not email or not password:
+        return jsonify({'error': 'name, email e password sao obrigatorios'}), 400
+        
+    existing = User.query.filter_by(email=email).first()
+    if existing:
+        return jsonify({'error': 'email ja cadastrado'}), 400
+        
+    user = User(name=name, email=email, bio=data.get('bio'), role='user')
+    user.set_password(password)
+    db.session.add(user)
+    db.session.commit()
+    return jsonify(user.to_dict()), 201
+
 @api_bp.route('/leads', methods=['GET'])
 @jwt_required()
 def get_leads():
@@ -102,6 +122,21 @@ def create_lead():
     db.session.add(lead)
     db.session.commit()
     return jsonify(lead.to_dict()), 201
+
+@api_bp.route('/leads/<int:lead_id>', methods=['GET'])
+@jwt_required()
+def get_lead(lead_id):
+    user = get_current_user()
+    if not user:
+        return jsonify({'error': 'Unauthorized'}), 401
+        
+    if user.role not in {'admin', 'manager', 'advogado', 'atendente'}:
+        return jsonify({'error': 'Acesso restrito a este perfil'}), 403
+        
+    lead = db.session.get(Lead, lead_id)
+    if not lead:
+        return jsonify({'error': 'Lead not found'}), 404
+    return jsonify(lead.to_dict()), 200
 
 @api_bp.route('/leads/<int:lead_id>/triage', methods=['POST'])
 @jwt_required()
@@ -186,6 +221,19 @@ def convert_lead(lead_id):
     
     return jsonify({'ok': True, 'cliente_id': cliente.id, 'user_id': created_user_id}), 200
 
+@api_bp.route('/consultas', methods=['GET'])
+@jwt_required()
+def get_consultas():
+    user = get_current_user()
+    if not user:
+        return jsonify({'error': 'Unauthorized'}), 401
+        
+    if user.role not in {'admin', 'manager', 'advogado', 'atendente'}:
+        return jsonify({'error': 'Acesso restrito a este perfil'}), 403
+        
+    consultas = Consulta.query.order_by(Consulta.scheduled_at.asc()).all()
+    return jsonify([c.to_dict() for c in consultas]), 200
+
 @api_bp.route('/consultas', methods=['POST'])
 @jwt_required()
 def create_consulta():
@@ -240,6 +288,19 @@ def cancel_consulta(consulta_id):
     db.session.add(consulta)
     db.session.commit()
     return jsonify(consulta.to_dict()), 200
+
+@api_bp.route('/processos', methods=['GET'])
+@jwt_required()
+def get_processos():
+    user = get_current_user()
+    if not user:
+        return jsonify({'error': 'Unauthorized'}), 401
+        
+    if user.role not in {'admin', 'manager', 'advogado', 'atendente'}:
+        return jsonify({'error': 'Acesso restrito a este perfil'}), 403
+        
+    processos = Processo.query.order_by(Processo.created_at.desc()).all()
+    return jsonify([p.to_dict() for p in processos]), 200
 
 @api_bp.route('/processos', methods=['POST'])
 @jwt_required()
@@ -324,5 +385,47 @@ def get_metrics():
     return jsonify({
         'total_leads': total_leads,
         'pending_consultas': pending_consultas,
+        'open_processos': open_processos
+    }), 200
+
+@api_bp.route('/perfil', methods=['GET', 'PUT', 'POST'])
+@jwt_required()
+def get_perfil():
+    user = get_current_user()
+    if not user:
+        return jsonify({'error': 'Unauthorized'}), 401
+    if request.method in ('PUT', 'POST'):
+        data = request.get_json(silent=True) or {}
+        name = data.get('name')
+        bio = data.get('bio')
+        if name:
+            user.name = name.strip()
+        if bio is not None:
+            user.bio = bio.strip()
+        db.session.add(user)
+        db.session.commit()
+    return jsonify(user.to_dict()), 200
+
+@api_bp.route('/dashboard/metricas', methods=['GET'])
+@jwt_required()
+def get_dashboard_metrics():
+    user = get_current_user()
+    if not user:
+        return jsonify({'error': 'Unauthorized'}), 401
+        
+    if user.role not in {'admin', 'manager', 'advogado', 'atendente'}:
+        return jsonify({'error': 'Acesso restrito a este perfil'}), 403
+        
+    total_leads = Lead.query.count()
+    new_leads = Lead.query.filter_by(status='new').count()
+    triaged_leads = Lead.query.filter(Lead.triage_classification.isnot(None)).count()
+    scheduled_consultas = Consulta.query.filter_by(status='scheduled').count()
+    open_processos = Processo.query.filter_by(status='open').count()
+    
+    return jsonify({
+        'total_leads': total_leads,
+        'leads_novos': new_leads,
+        'leads_triados': triaged_leads,
+        'consultas_agendadas': scheduled_consultas,
         'open_processos': open_processos
     }), 200

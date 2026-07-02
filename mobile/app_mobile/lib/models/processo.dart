@@ -33,6 +33,7 @@ class Movimentacao {
 class Processo {
   final int id;
   final int leadId;
+  final String? leadName;
   final String title;
   final String? description;
   final String status;
@@ -41,6 +42,7 @@ class Processo {
   Processo({
     required this.id,
     required this.leadId,
+    this.leadName,
     required this.title,
     this.description,
     required this.status,
@@ -56,6 +58,7 @@ class Processo {
     return Processo(
       id: json['id'],
       leadId: json['lead_id'],
+      leadName: json['lead_name'],
       title: json['title'] ?? '',
       description: json['description'],
       status: json['status'] ?? 'open',
@@ -67,6 +70,7 @@ class Processo {
     return {
       'id': id,
       'lead_id': leadId,
+      'lead_name': leadName,
       'title': title,
       'description': description,
       'status': status,

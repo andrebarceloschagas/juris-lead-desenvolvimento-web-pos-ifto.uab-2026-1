@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/user.dart';
 import '../services/auth_service.dart';
+import '../services/api_service.dart';
 
 class AuthViewModel extends ChangeNotifier {
   final AuthService _authService = AuthService();
@@ -13,6 +14,13 @@ class AuthViewModel extends ChangeNotifier {
 
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
+
+  AuthViewModel() {
+    ApiService.onUnauthorized.listen((_) {
+      _currentUser = null;
+      notifyListeners();
+    });
+  }
 
   Future<bool> login(String email, String password) async {
     _isLoading = true;
@@ -39,11 +47,58 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   Future<void> checkAuthStatus() async {
-    // Basic check. A full implementation might validate the token with the server.
     bool hasToken = await _authService.isAuthenticated();
-    if (!hasToken) {
+    if (hasToken) {
+      _currentUser = await _authService.getPerfil();
+      if (_currentUser == null) {
+        // Se falhou ao buscar o perfil (ex: token inválido/expirado), desloga
+        await logout();
+      }
+    } else {
       _currentUser = null;
     }
     notifyListeners();
+  }
+
+  Future<bool> register(String name, String email, String password, String? bio) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final success = await _authService.register(name, email, password, bio);
+      _isLoading = false;
+      notifyListeners();
+      return success;
+    } catch (e) {
+      _errorMessage = e.toString();
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> updatePerfil(String name, String? bio) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final updatedUser = await _authService.updatePerfil(name, bio);
+      if (updatedUser != null) {
+        _currentUser = updatedUser;
+        _isLoading = false;
+        notifyListeners();
+        return true;
+      }
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    } catch (e) {
+      _errorMessage = e.toString();
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
   }
 }

@@ -103,6 +103,7 @@ class Consulta(db.Model):
         return {
             'id': self.id,
             'lead_id': self.lead_id,
+            'lead_name': self.lead.name if self.lead else '',
             'scheduled_at': self.scheduled_at.isoformat() if self.scheduled_at else None,
             'status': self.status,
         }
@@ -123,6 +124,7 @@ class Processo(db.Model):
         base = {
             'id': self.id,
             'lead_id': self.lead_id,
+            'lead_name': self.lead.name if self.lead else '',
             'title': self.title,
             'description': self.description,
             'status': self.status,

@@ -1,15 +1,17 @@
-import 'dart:convert';
-import 'api_client.dart';
+import 'api_service.dart';
 
 class DashboardService {
-  final ApiClient _apiClient = ApiClient();
+  final ApiService _apiService = ApiService();
 
   Future<Map<String, dynamic>> getMetrics() async {
-    final response = await _apiClient.get('/metrics');
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body);
-    } else {
-      throw Exception('Falha ao carregar métricas');
+    try {
+      final data = await _apiService.get('/dashboard/metricas');
+      if (data is Map<String, dynamic>) {
+        return data;
+      }
+      throw Exception('Formato de resposta de métricas inválido.');
+    } catch (e) {
+      rethrow;
     }
   }
 }

@@ -46,4 +46,41 @@ class LeadViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<bool> createLead(String name, String email, String phone, String documento) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+    try {
+      final lead = await _leadService.createLead(name, email, phone, documento);
+      _leads.insert(0, lead);
+      return true;
+    } catch (e) {
+      _errorMessage = e.toString();
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> convertLead(int leadId) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+    try {
+      await _leadService.convertLead(leadId);
+      final index = _leads.indexWhere((l) => l.id == leadId);
+      if (index != -1) {
+        await fetchLeads(); 
+      }
+      return true;
+    } catch (e) {
+      _errorMessage = e.toString();
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 }
