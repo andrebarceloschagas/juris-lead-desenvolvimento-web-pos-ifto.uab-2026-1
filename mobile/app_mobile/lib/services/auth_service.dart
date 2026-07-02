@@ -1,9 +1,10 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'storage_service.dart';
 import '../models/user.dart';
 import 'api_service.dart';
 
 class AuthService {
   final ApiService _apiService = ApiService();
+  final StorageService _storage = StorageService();
 
   Future<User?> login(String email, String password) async {
     try {
@@ -16,8 +17,7 @@ class AuthService {
         final token = data['access_token'];
         final userData = data['user'];
 
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('token', token);
+        await _storage.saveToken(token);
         return User.fromJson(userData);
       }
       return null;
@@ -27,14 +27,11 @@ class AuthService {
   }
 
   Future<void> logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
+    await _storage.deleteToken();
   }
 
   Future<bool> isAuthenticated() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
-    return token != null;
+    return await _storage.hasToken();
   }
 
   Future<User?> getPerfil() async {

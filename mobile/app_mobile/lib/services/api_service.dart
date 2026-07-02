@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+import 'storage_service.dart';
 import '../config/app_config.dart';
 
 class UnauthorizedException implements Exception {
@@ -16,10 +16,11 @@ class UnauthorizedException implements Exception {
 class ApiService {
   static final StreamController<void> _unauthorizedController = StreamController<void>.broadcast();
   static Stream<void> get onUnauthorized => _unauthorizedController.stream;
+  
+  final StorageService _storage = StorageService();
 
   Future<Map<String, String>> _getHeaders() async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('token');
+    final token = await _storage.getToken();
     
     final headers = {
       'Content-Type': 'application/json',
@@ -37,13 +38,18 @@ class ApiService {
       print('=== API RESPONSE ===');
       print('URL: ${response.request?.url}');
       print('Status: ${response.statusCode}');
-      print('Body: ${response.body}');
+      // Não logar corpo da resposta se for muito grande ou se quisermos evitar leaks
+      // No login, o corpo contém o access_token, então vamos filtrar se possível ou omitir
+      if (response.request?.url.path.contains('/auth/login') ?? false) {
+        print('Body: [CONTEÚDO SENSÍVEL OMITIDO]');
+      } else {
+        print('Body: ${response.body}');
+      }
       print('====================');
     }
 
     if (response.statusCode == 401) {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.remove('token');
+      await _storage.deleteToken();
       _unauthorizedController.add(null);
       throw UnauthorizedException('Sessão expirada. Por favor, faça login novamente.');
     }
@@ -70,9 +76,13 @@ class ApiService {
       final url = Uri.parse('${AppConfig.baseUrl}$endpoint');
       
       if (kDebugMode) {
+        final safeHeaders = Map<String, String>.from(headers);
+        if (safeHeaders.containsKey('Authorization')) {
+          safeHeaders['Authorization'] = 'Bearer [REDACTED]';
+        }
         print('=== API GET ===');
         print('URL: $url');
-        print('Headers: $headers');
+        print('Headers: $safeHeaders');
         print('===============');
       }
 
@@ -93,10 +103,20 @@ class ApiService {
       final url = Uri.parse('${AppConfig.baseUrl}$endpoint');
 
       if (kDebugMode) {
+        final safeHeaders = Map<String, String>.from(headers);
+        if (safeHeaders.containsKey('Authorization')) {
+          safeHeaders['Authorization'] = 'Bearer [REDACTED]';
+        }
+        
+        final safeBody = Map<String, dynamic>.from(body);
+        if (safeBody.containsKey('password')) {
+          safeBody['password'] = '********';
+        }
+
         print('=== API POST ===');
         print('URL: $url');
-        print('Headers: $headers');
-        print('Body: $body');
+        print('Headers: $safeHeaders');
+        print('Body: $safeBody');
         print('================');
       }
 
